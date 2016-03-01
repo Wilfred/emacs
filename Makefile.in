@@ -141,6 +141,9 @@ datarootdir=@datarootdir@
 # and ${etcdir} are subdirectories of this.
 datadir=@datadir@
 
+# Where to install C sources of builtin functions.
+builtinsrcdir=@builtinsrcdir@
+
 # Where to install and expect the files that Emacs modifies as it
 # runs.  These files are all architecture-independent.
 # Right now, this is not used.
@@ -460,7 +463,7 @@ $(srcdir)/src/stamp-h.in: $(AUTOCONF_INPUTS)
 
 # ==================== Installation ====================
 
-.PHONY: install install-arch-dep install-arch-indep install-etcdoc install-info
+.PHONY: install install-arch-dep install-arch-indep install-builtin-src install-etcdoc install-info
 .PHONY: install-man install-etc install-strip install-$(NTDIR)
 .PHONY: uninstall uninstall-$(NTDIR)
 
@@ -468,7 +471,7 @@ $(srcdir)/src/stamp-h.in: $(AUTOCONF_INPUTS)
 ## don't have to duplicate the list of utilities to install in
 ## this Makefile as well.
 
-install: all install-arch-indep install-etcdoc install-arch-dep install-$(NTDIR) blessmail
+install: all install-arch-indep install-builtin-src install-etcdoc install-arch-dep install-$(NTDIR) blessmail
 	@true
 
 ## Ensure that $subdir contains a subdirs.el file.
@@ -502,6 +505,14 @@ endif
 else
 	subdir=${ns_appresdir}/site-lisp && ${write_subdir}
 	rm -rf ${ns_appresdir}/share
+endif
+
+### Copy C sources of builtin function to the destination dir, so
+### users can view the source code of C functions with `find-file'.
+install-builtin-src:
+ifneq (${builtinsrcdir},)
+	${MKDIR_P} "${builtinsrcdir}"
+	cp ${srcdir}/src/*.{c,h} "${builtinsrcdir}"
 endif
 
 ### Windows-specific install target for installing programs produced

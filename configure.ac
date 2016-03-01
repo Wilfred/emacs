@@ -196,6 +196,7 @@ dnl hence the single quotes.  This is per the GNU coding standards, see
 dnl (autoconf) Installation Directory Variables
 dnl See also epaths.h below.
 lispdir='${datadir}/emacs/${version}/lisp'
+builtinsrcdir='${datadir}/emacs/${version}/src'
 standardlisppath='${lispdir}'
 locallisppath='${datadir}/emacs/${version}/site-lisp:'\
 '${datadir}/emacs/site-lisp'
@@ -409,6 +410,13 @@ case ${with_gameuser} in
   :*) gamegroup=${with_gameuser#:} ;;
   *) gameuser=${with_gameuser} ;;
 esac
+
+OPTION_DEFAULT_OFF([builtin-sources],[install C sources of built-in functions])
+
+echo "with builtin sources: $with_builtin_sources"
+if test $with_builtin_sources != "yes"; then
+   builtinsrcdir=
+fi
 
 AC_ARG_WITH([gnustep-conf],dnl
 [AS_HELP_STRING([--with-gnustep-conf=FILENAME],
@@ -4876,6 +4884,7 @@ AC_SUBST(libexecdir)
 AC_SUBST(mandir)
 AC_SUBST(infodir)
 AC_SUBST(lispdir)
+AC_SUBST(builtinsrcdir)
 AC_SUBST(standardlisppath)
 AC_SUBST(locallisppath)
 AC_SUBST(lisppath)
