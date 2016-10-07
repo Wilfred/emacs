@@ -1,0 +1,6 @@
+test:
+  script:
+    - ./autogen.sh
+    - ./configure
+    - make -j 3
+    - make check
